@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Crazy Chess</title>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="prefetch" href="https://images.chesscomfiles.com/chess-themes/pieces/marble/150/wp.png"/>
+        <link rel="prefetch" href="https://images.chesscomfiles.com/chess-themes/pieces/marble/150/wn.png"/>
+        <link rel="prefetch" href="https://images.chesscomfiles.com/chess-themes/pieces/marble/150/wb.png"/>
+        <link rel="prefetch" href="https://images.chesscomfiles.com/chess-themes/pieces/marble/150/wr.png"/>
+        <link rel="prefetch" href="https://images.chesscomfiles.com/chess-themes/pieces/marble/150/wq.png"/>
+        <link rel="prefetch" href="https://images.chesscomfiles.com/chess-themes/pieces/marble/150/wk.png"/>
+        <link rel="prefetch" href="https://images.chesscomfiles.com/chess-themes/pieces/marble/150/bp.png"/>
+        <link rel="prefetch" href="https://images.chesscomfiles.com/chess-themes/pieces/marble/150/bn.png"/>
+        <link rel="prefetch" href="https://images.chesscomfiles.com/chess-themes/pieces/marble/150/bb.png"/>
+        <link rel="prefetch" href="https://images.chesscomfiles.com/chess-themes/pieces/marble/150/br.png"/>
+        <link rel="prefetch" href="https://images.chesscomfiles.com/chess-themes/pieces/marble/150/bq.png"/>
+        <link rel="prefetch" href="https://images.chesscomfiles.com/chess-themes/pieces/marble/150/bk.png"/>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+        <style>
+            body {
+                background-color: #121212;
+                color: #dedede;
+
+                margin: 0;
+
+                font-family: "PT Sans", sans-serif;
+                line-height: 1.25;
+            }
+
+            #cont, #modal_cont {
+                width: 100vw;
+                height: 100vh;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+
+            #board {
+                background-image: url('https://images.chesscomfiles.com/chess-themes/boards/metal/200.png');
+                background-size: cover;
+
+                border: none;
+
+                width: 80vh;
+                height: 80vh;
+                display: block;
+            }
+
+            #board tr {
+                display: flex;
+            }
+
+            #board td {
+                width: 10vh;
+                height: 10vh;
+                padding: 0;
+                position: relative;
+                user-select: none;
+            }
+
+            td img {
+                display: block;
+                pointer-events: none;
+                width: 100%;
+            }
+
+            #modal {
+                padding: 48px;
+                background-color: #121212;
+            }
+
+            #lobby_id_cont {
+                display: flex;
+                gap: 8px;
+            }
+
+            #modal input[type=text] {
+                background-color: #000000;
+                color: inherit;
+                font-family: "Roboto Mono", monospace;
+                font-size: 18px;
+                line-height: inherit;
+                padding: 12px;
+                border: 2px solid #dedede;
+            }
+
+            #modal input[type=text]::placeholder {
+                color: #6f6f6f;
+                font-family: "PT Sans", sans-serif;
+            }
+
+            #modal b {
+                display: block;
+                text-align: center;
+                font-size: 18px;
+                margin: 18px 0;
+                user-select: none;
+            }
+
+            #modal button {
+                background-color: #007788;
+                color: #ffffff;
+                font-family: inherit;
+                padding: 14px 24px;
+                font-size: 18px;
+                line-height: inherit;
+                border: none;
+                cursor: pointer;
+            }
+
+            #modal button:disabled {
+                background-color: #777777;
+            }
+
+            #init_lobby {
+                width: 100%;
+            }
+
+            #show_lobby_id_cont {
+                display: none;
+            }
+
+            #modal h2 {
+                text-align: center;
+                font-size: 18px;
+                margin: 0;
+                user-select: none;
+            }
+
+            #modal h1 {
+                text-align: center;
+                font-family: "Roboto Mono", monospace;
+                font-size: 48px;
+                margin: 0;
+                margin-top: 12px;
+            }
+
+            #board_cont {
+                position: relative;
+            }
+
+            #countdown_cont {
+                position: absolute;
+                top: 0;
+                left: 0;
+
+                width: 100%;
+                height: 100%;
+
+                display: none;
+                align-items: center;
+            }
+
+            #countdown {
+                background-color: rgba(0, 0, 0, 0.75);
+                width: 100%;
+                text-align: center;
+                padding: 5vh 0;
+                font-family: "PT Sans", sans-serif;
+                font-size: 10vh;
+                font-weight: bold;
+                line-height: 1;
+                user-select: none;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="cont">
+            <div>
+                <div id="board_cont">
+                    <table id="board"></table>
+
+                    <div id="countdown_cont">
+                        <div id="countdown">3</div>
+                    </div>
+                </div>
+
+                <!--<button id="reset">Reset</button>-->
+            </div>
+        </div>
+
+        <div id="modal_cont">
+            <div id="modal">
+                <div id="choose_lobby_cont">
+                    <div id="lobby_id_cont">
+                        <input type="text" id="lobby_id" maxlength="8" placeholder="Lobby ID"/>
+                        <button id="go">Go</button>
+                    </div>
+
+                    <b>OR</b>
+
+                    <button id="init_lobby">Start lobby</button>
+                </div>
+
+                <div id="show_lobby_id_cont">
+                    <h2>Your lobby ID is:</h2>
+                    <h1 id="show_lobby_id"></h1>
+                </div>
+            </div>
+        </div>
+
+        <script src="ui.js"></script>
+        <script src="game.js"></script>
+        <script src="ws.js"></script>
+    </body>
+</html>
