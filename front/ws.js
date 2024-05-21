@@ -3,7 +3,7 @@ var player_id = null;
 function send_move() {}
 
 function start_ws(lobby_id) {
-    const ws = new WebSocket("ws://localhost:8007");
+    const ws = new WebSocket("wss://" + window.location.host + "/crazy-chess/ws");
 
     ws.binaryType = "arraybuffer";
 
