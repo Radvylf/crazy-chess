@@ -17,6 +17,9 @@ function play_game(player_0, player_1) {
         ["br24", "bn25", "bb26", "bq27", "bk28", "bb29", "bn30", "br31"]
     ];
 
+    let white_last_moved_piece = null;
+    let black_last_moved_piece = null;
+
     function send_state(last_move = null) {
         player_0.send(JSON.stringify({
             board: board_state,
@@ -111,7 +114,7 @@ function play_game(player_0, player_1) {
 
         const block = is_blocked(move, board_state);
 
-        if (board_state[move.src[0]][move.src[1]] != move.src[2] || board_state[move.dst[0]][move.dst[1]] != null && board_state[move.dst[0]][move.dst[1]][0] == "wb"[player] || block[0]) {
+        if (board_state[move.src[0]][move.src[1]] != move.src[2] || board_state[move.dst[0]][move.dst[1]] != null && board_state[move.dst[0]][move.dst[1]][0] == "wb"[player] || block[0] || [white_last_moved_piece, black_last_moved_piece][player] == move.src[2]) {
             [player_0, player_1][player].send("");
             
             return;
@@ -123,6 +126,12 @@ function play_game(player_0, player_1) {
         if (move.src[2][1] == "k" && 1 in block) {
             board_state[(move.src[0] + move.dst[0]) / 2][(move.src[1] + move.dst[1]) / 2] = board_state[block[1]][block[2]];
             if (block[1] != (move.src[0] + move.dst[0]) / 2 || block[2] != (move.src[1] + move.dst[1]) / 2) board_state[block[1]][block[2]] = null;
+        }
+
+        if (player == 0) {
+            white_last_moved_piece = move.src[2];
+        } else {
+            black_last_moved_piece = move.src[2];
         }
 
         send_state(move);
